@@ -21,11 +21,16 @@ public class UnitSelect : MonoBehaviour
             _instance = this;
         }
     }
+    private void SelectUnitIndicator(GameObject unit,bool active)
+    {
+        unit.transform.GetChild(0).gameObject.SetActive(active);
+    }
 
     public void ClickSelect(GameObject unitToAdd)
     {
         DeselectAll();
         selectedUnits.Add(unitToAdd);
+        SelectUnitIndicator(unitToAdd,true);
     }
 
     public void ShiftClickSelect(GameObject unitToAdd)
@@ -33,9 +38,11 @@ public class UnitSelect : MonoBehaviour
         if(!selectedUnits.Contains(unitToAdd))
         {
             selectedUnits.Add(unitToAdd);
+            SelectUnitIndicator(unitToAdd,true);
         }
-        else
+        else if(selectedUnits.Contains(unitToAdd))
         {
+            SelectUnitIndicator(unitToAdd,false);
             selectedUnits.Remove(unitToAdd);
         }
     }
@@ -46,6 +53,10 @@ public class UnitSelect : MonoBehaviour
 
     public void DeselectAll()
     {
+        foreach(GameObject unit in selectedUnits)
+        {
+            SelectUnitIndicator(unit,false);
+        }
         selectedUnits.Clear();
     }
 

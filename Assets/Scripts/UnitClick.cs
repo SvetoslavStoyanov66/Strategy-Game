@@ -19,7 +19,7 @@ public class UnitClick : MonoBehaviour
     void Update()
     {
       
-        if(Input.GetMouseButton(0))
+        if(Input.GetMouseButtonDown(0))
         {
             RaycastHit hit;
             Ray ray1 = myCam.ScreenPointToRay(Input.mousePosition);
@@ -37,12 +37,11 @@ public class UnitClick : MonoBehaviour
             }
             else
             {
-               if(!Input.GetKeyDown(KeyCode.LeftShift))
+               if(!Input.GetKey(KeyCode.LeftShift))
                {
                   UnitSelect.Instance.DeselectAll();
                }
             }
-
         }
 
     }
