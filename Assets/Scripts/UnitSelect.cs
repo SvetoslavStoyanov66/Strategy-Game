@@ -49,6 +49,11 @@ public class UnitSelect : MonoBehaviour
 
     public void DragSelect(GameObject unitToAdd)
     {
+        if(!selectedUnits.Contains(unitToAdd))
+        {
+            selectedUnits.Add(unitToAdd);
+            SelectUnitIndicator(unitToAdd,true);
+        }
     }
 
     public void DeselectAll()
