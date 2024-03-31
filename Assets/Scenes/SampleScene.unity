@@ -648,6 +648,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: FarmingUnit
       objectReference: {fileID: 0}
+    - target: {fileID: 8070116677521305746, guid: 88091b41c22b52440b99a7130f8142c0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 88091b41c22b52440b99a7130f8142c0, type: 3}
 --- !u!1 &889444185
