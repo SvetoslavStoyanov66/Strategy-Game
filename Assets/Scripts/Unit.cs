@@ -33,9 +33,6 @@ public class Unit : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, ground))
             {
-                myAgent.SetDestination(hit.point);
-            } if (Physics.Raycast(ray, out hit, Mathf.Infinity, ground))
-        {
             // Check if the hit object is a resource
             ResourceNode resourceNode = hit.collider.GetComponent<ResourceNode>();
             if (resourceNode != null)
@@ -48,7 +45,6 @@ public class Unit : MonoBehaviour
                 // Check if the hit object is the storage area
                 if (hit.collider.CompareTag("StorageArea"))
                 {
-                    // Move to storage
                     unitGatheringAI.MoveToStorage();
                 }
                 else
@@ -59,7 +55,7 @@ public class Unit : MonoBehaviour
                     isMoving = true;
                 }
             }
-        }
+            }
         }
 
         animator.SetBool("isRunning", isMoving);

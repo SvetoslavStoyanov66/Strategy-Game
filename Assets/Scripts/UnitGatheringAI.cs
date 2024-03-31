@@ -12,12 +12,15 @@ public class UnitGatheringAI : MonoBehaviour
     Animator animator;
 
     GameObject picaxe; 
+    GameObject bag;
+    bool leavingResources = false;
     void Start()
     {
         unit = GetComponent<Unit>();
         storageArea = GameObject.FindGameObjectWithTag("StorageArea");
         animator = GetComponent<Animator>();
         picaxe = transform.GetChild(1).GetChild(5).GetChild(0).GetChild(0).GetChild(7).GetChild(0).GetChild(1).GetChild(0).GetChild(0).GetChild(0).gameObject;
+        bag =  transform.GetChild(1).GetChild(5).GetChild(1).gameObject;
     }
     public void GatheringResource(GameObject resource)
     {
@@ -32,6 +35,7 @@ public class UnitGatheringAI : MonoBehaviour
     public void MoveToStorage()
     {
         unit.MoveTo(storageArea.transform.position);
+        leavingResources = true;
     }
     public void CancelGathering()
     {
@@ -50,13 +54,37 @@ public class UnitGatheringAI : MonoBehaviour
             }
             else if(other.gameObject == storageArea)
             {
-                unit.StopMovement();
+                unit.StopMovement();       
+                ResourceLeaving();
                 GatheringResource(currentResource);
-                RecourseTracker.Instance.StoneValueChaning(stoneAmountInUnit);
-                stoneAmountInUnit = 0;
+                leavingResources = false;
             }
         }
+        else if(other.gameObject == storageArea)
+        {
+            unit.StopMovement();
+            ResourceLeaving();
+            leavingResources = false;
+        }
 
+
+    }
+    private void ResourceLeaving()
+    {
+        RecourseTracker.Instance.StoneValueChaning(stoneAmountInUnit);
+        stoneAmountInUnit = 0;
+        BagAppearanceCheck();
+    }
+    private void BagAppearanceCheck()
+    {
+        if(stoneAmountInUnit > 0)
+        {
+            bag.SetActive(true);
+        }
+        else
+        {
+            bag.SetActive(false);
+        }
     }
     IEnumerator DiggingOnce()
     {
@@ -64,6 +92,7 @@ public class UnitGatheringAI : MonoBehaviour
         yield return new WaitForSeconds(1);
         stoneAmountInUnit++;
         animator.SetBool("isMining",false);
+        BagAppearanceCheck();
     }
     IEnumerator DiggingRoutine()
     {
