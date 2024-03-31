@@ -9,12 +9,15 @@ public class Unit : MonoBehaviour
     public LayerMask ground;
     Animator animator;
     bool isMoving = false;
+    UnitGatheringAI unitGatheringAI;
     void Start()
     {
         UnitSelect.Instance.allUnits.Add(this.gameObject);
         myAgent = GetComponent<NavMeshAgent>();
         myCam = Camera.main;
         animator = GetComponent<Animator>();
+        unitGatheringAI = GetComponent<UnitGatheringAI>();
+    
     }
     void Destroy()
     {
@@ -31,17 +34,48 @@ public class Unit : MonoBehaviour
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, ground))
             {
                 myAgent.SetDestination(hit.point);
-                isMoving = true; // Set the flag to indicate movement
+            } if (Physics.Raycast(ray, out hit, Mathf.Infinity, ground))
+        {
+            // Check if the hit object is a resource
+            ResourceNode resourceNode = hit.collider.GetComponent<ResourceNode>();
+            if (resourceNode != null)
+            {
+                // Move to gather resource
+                unitGatheringAI.GatheringResource(resourceNode.gameObject);
+            }
+            else
+            {
+                // Check if the hit object is the storage area
+                if (hit.collider.CompareTag("StorageArea"))
+                {
+                    // Move to storage
+                    unitGatheringAI.MoveToStorage();
+                }
+                else
+                {
+                    // Move to the clicked point
+                    unitGatheringAI.CancelGathering();
+                    myAgent.SetDestination(hit.point);
+                    isMoving = true;
+                }
             }
         }
+        }
 
-        // Check if the agent is moving and update the animator accordingly
         animator.SetBool("isRunning", isMoving);
 
-        // Check if the agent has reached its destination
         if (isMoving && !myAgent.pathPending && myAgent.remainingDistance <= myAgent.stoppingDistance + 0.8f)
         {
-            isMoving = false; // Set the flag to indicate that the unit has stopped moving
+            isMoving = false; 
         }
+    }
+    public void MoveTo(Vector3 position)
+    {
+        myAgent.SetDestination(position);
+        isMoving = true;
+    }
+    public void StopMovement()
+    {
+        myAgent.ResetPath();
     }
 }

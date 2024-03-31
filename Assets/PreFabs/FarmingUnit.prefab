@@ -2784,6 +2784,7 @@ GameObject:
   - component: {fileID: 4863775607291648791}
   - component: {fileID: 8039761248303148301}
   - component: {fileID: -1507735020927899283}
+  - component: {fileID: 1308125073136575655}
   m_Layer: 9
   m_Name: FarmingUnit
   m_TagString: Untagged
@@ -2883,6 +2884,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1308125073136575655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5493110216864503052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 074ef05d92b485144a7749dfece49384, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5629664582124173505
 GameObject:
   m_ObjectHideFlags: 0
