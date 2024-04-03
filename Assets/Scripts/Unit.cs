@@ -19,52 +19,26 @@ public class Unit : MonoBehaviour
         unitGatheringAI = GetComponent<UnitGatheringAI>();
     
     }
-    void Destroy()
+    void OnDestroy()
     {
         UnitSelect.Instance.allUnits.Remove(this.gameObject);
     }
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(1) && UnitSelect.Instance.selectedUnits.Contains(this.gameObject))
+        if (Input.GetMouseButtonDown(1) && UnitSelect.Instance.selectedUnits.Contains(gameObject))
         {
-            RaycastHit hit;
-            Ray ray = myCam.ScreenPointToRay(Input.mousePosition);
-
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, ground))
-            {
-            // Check if the hit object is a resource
-            ResourceNode resourceNode = hit.collider.GetComponent<ResourceNode>();
-            if (resourceNode != null)
-            {
-                // Move to gather resource
-                unitGatheringAI.GatheringResource(resourceNode.gameObject);
-            }
-            else
-            {
-                // Check if the hit object is the storage area
-                if (hit.collider.CompareTag("StorageArea"))
-                {
-                    unitGatheringAI.MoveToStorage();
-                }
-                else
-                {
-                    // Move to the clicked point
-                    unitGatheringAI.CancelGathering();
-                    myAgent.SetDestination(hit.point);
-                    isMoving = true;
-                }
-            }
-            }
+            MoveToRaycastHit(RayCastManager.Instance.hitInfo.point);
         }
 
         animator.SetBool("isRunning", isMoving);
 
         if (isMoving && !myAgent.pathPending && myAgent.remainingDistance <= myAgent.stoppingDistance + 0.8f)
         {
-            isMoving = false; 
+            isMoving = false;
         }
     }
+
     public void MoveTo(Vector3 position)
     {
         myAgent.SetDestination(position);
@@ -73,5 +47,22 @@ public class Unit : MonoBehaviour
     public void StopMovement()
     {
         myAgent.ResetPath();
+    }
+      void MoveToRaycastHit(Vector3 hitPoint)
+    {
+        // Check if the hit object is a resource
+        ResourceNode resourceNode = RayCastManager.Instance.hitInfo.collider.GetComponent<ResourceNode>();
+        if (resourceNode != null)
+        {
+            // Move to gather resource
+            unitGatheringAI.GatheringResource(resourceNode.gameObject);
+        }
+        else
+        {
+            // Move to the hit point obtained from the RayCastManager
+            unitGatheringAI.CancelGathering();
+            myAgent.SetDestination(hitPoint);
+            isMoving = true;
+        }
     }
 }

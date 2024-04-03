@@ -7,18 +7,19 @@ public class UnitSelect : MonoBehaviour
     public List<GameObject> allUnits = new List<GameObject>();
     public List<GameObject> selectedUnits = new List<GameObject>();
 
-    private static UnitSelect _instance;
-    public static UnitSelect Instance{get{ return _instance;}}
+    public static UnitSelect Instance{get;set;}
+
+    public Vector3 rayCastPosition = new Vector3();
 
     void Awake()
     {
-        if(_instance != null && _instance != this)
+        if(Instance != null && Instance != this)
         {
             Destroy(this.gameObject);
         }
         else
         {
-            _instance = this;
+            Instance = this;
         }
     }
     private void SelectUnitIndicator(GameObject unit,bool active)
