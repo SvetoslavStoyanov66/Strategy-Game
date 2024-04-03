@@ -8,6 +8,8 @@ public class BuildingsFunction : MonoBehaviour
     [SerializeField]
     LayerMask buildings;
     GameObject currentSelection;
+    [SerializeField]
+    GameObject keeperUI;
     private void Start()
     {
         myCam = Camera.main; 
@@ -27,12 +29,14 @@ public class BuildingsFunction : MonoBehaviour
                 {
                     currentSelection.SetActive(false);
                 }
+                keeperUI.SetActive(false);
             }
         }
     }
 
     void HandleBuildingSelection(RaycastHit hit)
     {
+        keeperUI.SetActive(false);
         if (currentSelection != null)
         {
             currentSelection.SetActive(false);
@@ -42,7 +46,7 @@ public class BuildingsFunction : MonoBehaviour
 
         if (hit.collider.CompareTag("Keep"))
         {
-            Debug.Log("Keep clicked");
+            keeperUI.SetActive(true);
         }
     }
 }
